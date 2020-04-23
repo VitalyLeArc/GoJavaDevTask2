@@ -48,10 +48,11 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
-out/
-.idea/
 *.iml
 *.iws
+/.idea/
+out/
+.idea/
 
 # Maven
 log/
@@ -78,3 +79,4 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 /OtakoeGoJavaDevTask2.URL
+

@@ -1,4 +1,3 @@
-import repository.QueryToDB;
 import service.DeveloperService;
 import service.ProjectService;
 
@@ -25,7 +24,7 @@ public class Main {
         //6
         //final CustomerService customerService = new CustomerService();
         //customerService.addCustomer("OfficeWorkers",22,60);
-        //developerService.addDeveloper("BellaGates",37,"female",1,3200);
+        developerService.addDeveloper("BellaGates", 37, "female", 1, 3200);
         //projectService.addProject("Windows","Vista:revenge",30400,now());
     }
 }

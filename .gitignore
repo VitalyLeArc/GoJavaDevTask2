@@ -49,8 +49,6 @@ cmake-build-*/
 
 # IntelliJ
 *.iml
-*.iws
-/.idea/
 out/
 .idea/
 

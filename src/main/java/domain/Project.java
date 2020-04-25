@@ -1,36 +1,82 @@
 package domain;
 
 import java.sql.Date;
-import java.util.List;
+
 
 public class Project {
-    private int id;
+    private long id;
     private String name;
     private Date startDate;
+    private String version;
+    private float cost;
     private int countOfDevs;
-    private float sumSalary;
 
-    public Project(){}
-    public Project(String name){
-        this.name=name;
+    public Project(String name) {
+        this.name = name;
     }
-    public Project(int id, String name, Date startDate, int countOfDevs) {
+
+    public Project(String name, String version, float cost) {
         this(name);
-        this.id = id;
-        this.startDate = startDate;
+        this.version = version;
         this.countOfDevs = countOfDevs;
     }
 
-    public void setSumSalary(float sumSalary){
-        this.sumSalary=sumSalary;
+    public Project(String name, String version, float cost, Date startDate) {
+        this(name, version, cost);
+        this.startDate = startDate;
     }
-    public String getName(){
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setCost(float cost) {
+        this.cost = cost;
+    }
+
+    public void setCountOfDevs(int countOfDevs) {
+        this.countOfDevs = countOfDevs;
+    }
+
+    public String getName() {
         return name;
     }
-    public float getSumSalary(){
-        return sumSalary;
+
+
+    public String toString() {
+        return "id: " + id + ", name: " + name + " " + version + ", startDate: " + startDate.toString() + ", countOfDevelopers: " + countOfDevs;
     }
-    public String toString(){
-        return "id: "+id+", name: "+name+", startDate: "+startDate.toString()+", countOfDevelopers: "+countOfDevs;
+
+    public long getId() {
+        return id;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public float getCost() {
+        return cost;
+    }
+
+    public int getCountOfDevs() {
+        return countOfDevs;
     }
 }
+

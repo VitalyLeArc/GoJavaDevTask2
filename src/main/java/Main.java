@@ -1,5 +1,5 @@
-import service.DeveloperService;
-import service.ProjectService;
+import domain.*;
+import service.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,14 +24,15 @@ public class Main {
         //6
 
         /*
-        *запрос ниже не отработал. Получил в консоль "Ошибка в запросе" и "Что-то пошло не так".
-        * Это круто, что ты обрабатываешь исключения, но "что-то пошло не так"... Вот и думай.
-        * Я понял, в чем причина, а ты теперь ищи, раз из текста не ясно)
+         *запрос ниже не отработал. Получил в консоль "Ошибка в запросе" и "Что-то пошло не так".
+         * Это круто, что ты обрабатываешь исключения, но "что-то пошло не так"... Вот и думай.
+         * Я понял, в чем причина, а ты теперь ищи, раз из текста не ясно)
          */
+        //пофиксил.
 
         //final CustomerService customerService = new CustomerService();
-        //customerService.addCustomer("OfficeWorkers",22,60);
-        developerService.addDeveloper("BellaGates", 37, "female", 1, 3200);
-        //projectService.addProject("Windows","Vista:revenge",30400,now());
+        //customerService.addCustomer(new Customer("OfficeWorkers",22,60));
+        //developerService.addDeveloper(new Developer(0, "BellaGates", 37, "female", 1, 3200f));
+        //projectService.addProject(new Project("Windows", "Vista:revenge", 41600f), "today");
     }
 }

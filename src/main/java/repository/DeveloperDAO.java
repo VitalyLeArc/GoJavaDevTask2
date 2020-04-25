@@ -1,6 +1,7 @@
 package repository;
 
 import domain.Developer;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,23 +10,19 @@ import java.util.List;
 
 import static repository.QueryToDB.*;
 
+@Slf4j
 public class DeveloperDAO {
-
-    //что этот метод делает в DeveloperDAO?
-    //почему он возвращает boolean.
-    // Если ты просто проверяешь, существует такой проект или нет, то назови это checkProjectExistsWithName
-    //А вообще лучше сделать метод, который будет именно возвращать optional проект по имени и бросать исключение/выводить сообщение в консоль, если такого нет
-    private boolean findProjectByName(String projectName) {
-        try {
-            connectionBegin();
-            ResultSet resultSet = statement.executeQuery("select id from gosqltask1.projects where project_name='" + projectName + "'");
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    private void wrongQuery() {
+        log.error("Ошибка в запросе");
     }
 
+    /*что этот метод делает в DeveloperDAO?
+     *почему он возвращает boolean.
+     *Если ты просто проверяешь, существует такой проект или нет, то назови это checkProjectExistsWithName
+     *А вообще лучше сделать метод, который будет именно возвращать optional проект по имени и бросать исключение/выводить сообщение в консоль, если такого нет*/
+    //исправил
+
+    //2
     public List<Developer> getDevelopersForProject(String projectName) {
         List<Developer> list = new ArrayList<>();
         try {
@@ -39,7 +36,7 @@ public class DeveloperDAO {
                 list.add(new Developer(resultSet.getString("name")));
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            wrongQuery();
         }
         return list;
     }
@@ -58,7 +55,7 @@ public class DeveloperDAO {
                 list.add(new Developer(resultSet.getString("name")));
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            wrongQuery();
         }
         return list;
     }
@@ -77,19 +74,20 @@ public class DeveloperDAO {
                 list.add(new Developer(resultset.getString("name")));
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            wrongQuery();
         }
         return list;
     }
 
-    public boolean addDeveloper(String name, int age,String sex, int departmentId,float salary) {
+    public boolean addDeveloper(String name, int age, String sex, int departmentId, float salary) {
         boolean isSuccess = false;
-        try{
+        try {
             connectionBegin();
-            isSuccess = statement.execute("insert into gosqltask1.developers (name,age,sex,department_id,salary) values " +
-                    "('"+name+"',"+age+","+"'"+sex+"',"+departmentId+","+salary+");");
-        } catch(SQLException e){
-            System.out.println("Ошибка в запросе");
+            statement.execute("insert into gosqltask1.developers (name,age,sex,department_id,salary) values " +
+                    "('" + name + "'," + age + "," + "'" + sex + "'," + departmentId + "," + salary + ")");
+            isSuccess = true;
+        } catch (SQLException e) {
+            wrongQuery();
         }
         return isSuccess;
     }

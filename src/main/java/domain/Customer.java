@@ -4,21 +4,24 @@ import java.util.Objects;
 
 public class Customer {
     String name;
-    int id;
+    long id;
     int minAge;
     int maxAge;
 
-    public Customer(String name, int id, int minAge, int maxAge) {
+    public Customer(String name,  int minAge, int maxAge) {
         this.name = name;
-        this.id = id;
         this.minAge = minAge;
         this.maxAge = maxAge;
+    }
+    public Customer(String name, long id, int minAge, int maxAge) {
+        this(name,minAge,maxAge);
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
-    public int getId() {
+    public long getId() {
         return id;
     }
     public int getMinAge() {

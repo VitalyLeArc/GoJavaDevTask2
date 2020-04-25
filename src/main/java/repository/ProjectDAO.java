@@ -1,4 +1,5 @@
 package repository;
+
 import domain.Project;
 
 import java.sql.Date;
@@ -12,59 +13,65 @@ import static repository.QueryToDB.*;
 
 public class ProjectDAO {
     private final String selectSumSalaryForProject = "select sum(salary) as value from gosqltask1.developers dev " +
-        "inner join gosqltask1.link_developers_projects ldp on ldp.dev_id=dev.id " +
-        "inner join gosqltask1.projects pr on pr.id=ldp.project_id " +
-        "where pr.project_name = ";
+            "inner join gosqltask1.link_developers_projects ldp on ldp.dev_id=dev.id " +
+            "inner join gosqltask1.projects pr on pr.id=ldp.project_id " +
+            "where pr.project_name = ";
     private final String selectAllProjectsInfo = "select pr.id,pr.project_name as name,pr.datebegin,count(dev.id)as devcount " +
-        "from gosqltask1.projects pr "+
-        "join gosqltask1.link_developers_projects ldp on ldp.project_id=pr.id " +
-        "join gosqltask1.developers dev on ldp.dev_id=dev.id " +
-        "group by pr.id "+
-        "order by pr.id";
+            "from gosqltask1.projects pr " +
+            "join gosqltask1.link_developers_projects ldp on ldp.project_id=pr.id " +
+            "join gosqltask1.developers dev on ldp.dev_id=dev.id " +
+            "group by pr.id " +
+            "order by pr.id";
     private final String selectProjectName = "select project_name from gosqltask1.projects";
 //1
+
+    //Пусть метод возвращает сразу сумму, число, не нужен целый проект, см. коммент в ProjectService
     public Optional<Project> getProjectSumSalary(String projectName) {
-    Optional<Project> optional;
-    Project project=null;
+        Optional<Project> optional;
+        Project project = null;
         try {
             int sumSalary;
             connectionBegin();
             ResultSet resultSet = statement.executeQuery(
-                    selectSumSalaryForProject +"'"+ projectName + "'");
+                    selectSumSalaryForProject + "'" + projectName + "'");
             if (resultSet.next()) {
-                project=new Project();
+                project = new Project();
+                //Float - плохой выбор для работы с данными, которые требуют точности, например, деньги
+                //У нас же есть класс BigDecimal для этого
                 project.setSumSalary(resultSet.getFloat("value"));
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-    optional= Optional.ofNullable(project);
-    return optional;
-}
-
-//5
-    public List<Project> getAllProjectsInfo(){
-    List<Project> list = new ArrayList<>();
-    try {
-        connectionBegin();
-        ResultSet resultSet=statement.executeQuery(selectAllProjectsInfo);
-        while(resultSet.next()){
-            list.add(new Project(resultSet.getInt("id"),
-                    resultSet.getString("name"),
-                    resultSet.getDate("datebegin"),
-                    resultSet.getInt("devcount")));
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        optional = Optional.ofNullable(project);
+        return optional;
     }
-    return list;
-}
+
+    //5
+    public List<Project> getAllProjectsInfo() {
+        List<Project> list = new ArrayList<>();
+        try {
+            connectionBegin();
+            ResultSet resultSet = statement.executeQuery(selectAllProjectsInfo);
+            while (resultSet.next()) {
+                list.add(new Project(resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getDate("datebegin"),
+                        resultSet.getInt("devcount")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    //тебе опять не нужен целый объект, ты собираешься вывести только названия
     public List<Project> getProjectsName() {
         List<Project> projects = new ArrayList<>();
         try {
             connectionBegin();
-            ResultSet resultSet=statement.executeQuery(selectProjectName);
-            while(resultSet.next()){
+            ResultSet resultSet = statement.executeQuery(selectProjectName);
+            while (resultSet.next()) {
                 projects.add(new Project(resultSet.getString("project_name")));
             }
         } catch (SQLException e) {
@@ -73,23 +80,26 @@ public class ProjectDAO {
         return projects;
     }
 
-    public boolean addProject(String name, String version, float cost,Date date){
-        boolean isSuccess=false;
+    public boolean addProject(String name, String version, float cost, Date date) {
+        boolean isSuccess = false;
         try {
             connectionBegin();
-            isSuccess=statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
-                    "('"+name+"','"+version+"',"+cost+","+date+");");
+            isSuccess = statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
+                    "('" + name + "','" + version + "'," + cost + "," + date + ");");
         } catch (SQLException e) {
             System.out.println("Ошибка в запросе");
         }
         return isSuccess;
     }
-    public boolean addProject(String name, String version, float cost,String date){
-        boolean isSuccess=false;
+
+    //не боишься что придет некорретный формат даты в строке?
+    //почитай про DateTimeFormatter, убедись, что передаешь в БД валидную дату
+    public boolean addProject(String name, String version, float cost, String date) {
+        boolean isSuccess = false;
         try {
             connectionBegin();
-            isSuccess=statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
-                    "('"+name+"','"+version+"',"+cost+","+date+");");
+            isSuccess = statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
+                    "('" + name + "','" + version + "'," + cost + "," + date + ");");
         } catch (SQLException e) {
             System.out.println("Ошибка в запросе");
         }

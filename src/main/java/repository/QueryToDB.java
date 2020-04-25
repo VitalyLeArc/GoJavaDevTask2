@@ -31,6 +31,7 @@ public final class QueryToDB {
         statement = connection.createStatement();
     }
 
+    //что это за метод и что он тут делает?
     private static List<String> readProjectsName(){
         List<String> list = new ArrayList<>();
         try {

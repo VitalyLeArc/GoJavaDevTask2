@@ -10,6 +10,11 @@ import java.util.List;
 import static repository.QueryToDB.*;
 
 public class DeveloperDAO {
+
+    //что этот метод делает в DeveloperDAO?
+    //почему он возвращает boolean.
+    // Если ты просто проверяешь, существует такой проект или нет, то назови это checkProjectExistsWithName
+    //А вообще лучше сделать метод, который будет именно возвращать optional проект по имени и бросать исключение/выводить сообщение в консоль, если такого нет
     private boolean findProjectByName(String projectName) {
         try {
             connectionBegin();

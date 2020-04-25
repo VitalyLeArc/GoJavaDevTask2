@@ -22,6 +22,13 @@ public class Main {
         projectService.printAllProjectsInfo();
         System.out.println();
         //6
+
+        /*
+        *запрос ниже не отработал. Получил в консоль "Ошибка в запросе" и "Что-то пошло не так".
+        * Это круто, что ты обрабатываешь исключения, но "что-то пошло не так"... Вот и думай.
+        * Я понял, в чем причина, а ты теперь ищи, раз из текста не ясно)
+         */
+
         //final CustomerService customerService = new CustomerService();
         //customerService.addCustomer("OfficeWorkers",22,60);
         developerService.addDeveloper("BellaGates", 37, "female", 1, 3200);

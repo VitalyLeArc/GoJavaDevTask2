@@ -5,8 +5,6 @@ import repository.DeveloperDAO;
 
 import java.util.List;
 
-
-
 public class DeveloperService {
     private final DeveloperDAO developerDAO= new DeveloperDAO();
     private void emptyQuerry(){
@@ -14,7 +12,9 @@ public class DeveloperService {
     }
 
     public void printDevelopersForProject(String projectName) {
+        //зачем 2 строки?
         List<Developer> developers;
+        //почему сразу не инициализировать?
         developers = developerDAO.getDevelopersForProject(projectName);
         if (!developers.isEmpty()) {
             System.out.println("В проекте " + projectName + " участвуют:");
@@ -28,6 +28,7 @@ public class DeveloperService {
     }
 
     public void printDevelopersForSkill(String skill) {
+        //та же беда
         List<Developer> developers;
         developers = developerDAO.getDevelopersForSkill(skill);
         if (!developers.isEmpty()) {
@@ -42,6 +43,7 @@ public class DeveloperService {
     }
 
     public void printDevelopersForGrade(String grade) {
+        //то же
         List<Developer> developers;
         developers=developerDAO.getDevelopersForGrade(grade);
         if (!developers.isEmpty()) {
@@ -55,6 +57,7 @@ public class DeveloperService {
         }
     }
 
+    //см. коммент в ProjectService - проблемы с аргументами метода
     public void addDeveloper(String name,int age,String sex,int departmentID,float salary){
         if(developerDAO.addDeveloper(name,age,sex,departmentID,salary)){
             System.out.println("Данные добавлены в таблицу");

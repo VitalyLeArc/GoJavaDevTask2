@@ -11,7 +11,7 @@ create table developers(
     	name varchar(45) not null,
     	age int not null,
         sex enum('male','female') not null,
-	salary float,
+	    salary float,
     	primary key (id));
 
 drop table if exists skills;

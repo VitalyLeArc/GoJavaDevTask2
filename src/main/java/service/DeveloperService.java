@@ -10,14 +10,11 @@ import java.util.List;
 public class DeveloperService {
     private final DeveloperDAO developerDAO = new DeveloperDAO();
 
-    private void emptyQuerry() {
+    protected static void emptyQuery() {
         log.error("Запрос ничего не вывел");
     }
 
     public void printDevelopersForProject(String projectName) {
-        /*зачем 2 строки?
-        почему сразу не инициализировать?*/
-        //пофиксил
         List<Developer> developers = developerDAO.getDevelopersForProject(projectName);
         if (!developers.isEmpty()) {
             System.out.println("В проекте " + projectName + " участвуют:");
@@ -25,14 +22,11 @@ public class DeveloperService {
                 System.out.println("\t\t" + dev.getName());
             }
         } else {
-            emptyQuerry();
+            emptyQuery();
         }
     }
 
     public void printDevelopersForSkill(String skill) {
-        /*та же беда
-        */
-        //пофиксил
         List<Developer> developers = developerDAO.getDevelopersForSkill(skill);
         if (!developers.isEmpty()) {
             System.out.println("Список разработчиков " + skill + ":");
@@ -40,14 +34,11 @@ public class DeveloperService {
                 System.out.println("\t\t" + dev.getName());
             }
         } else {
-            emptyQuerry();
+            emptyQuery();
         }
     }
 
     public void printDevelopersForGrade(String grade) {
-        /*то же
-        */
-        //пофиксил
         List<Developer> developers = developerDAO.getDevelopersForGrade(grade);
         if (!developers.isEmpty()) {
             System.out.println("Список разработчиков с уровнем " + grade + ":");
@@ -55,18 +46,13 @@ public class DeveloperService {
                 System.out.println("\t\t" + dev.getName());
             }
         } else {
-            emptyQuerry();
+            emptyQuery();
         }
     }
 
-    /*см. коммент в ProjectService - проблемы с аргументами метода
-    */
-    //пофиксил, думаю
     public void addDeveloper(Developer dev) {
-        if (developerDAO.addDeveloper(dev.getName(), dev.getAge(), dev.getSex(), dev.getDepartmentId(), dev.getSalary())) {
-            System.out.println("Данные добавлены в таблицу");
-        } else {
-            System.out.println("Что-то пошло не так");
+        if (developerDAO.addDeveloper(dev)) {
+            log.info("Данные успешно добавлены");
         }
     }
 }

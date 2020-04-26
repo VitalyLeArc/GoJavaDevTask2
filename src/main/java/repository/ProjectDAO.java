@@ -1,16 +1,15 @@
 package repository;
 
 import domain.Project;
+import lombok.extern.slf4j.Slf4j;
+
+import static repository.QueryToDB.*;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
-
-import static repository.QueryToDB.*;
 
 @Slf4j
 public class ProjectDAO {
@@ -24,9 +23,8 @@ public class ProjectDAO {
             "join gosqltask1.developers dev on ldp.dev_id=dev.id " +
             "group by pr.id " +
             "order by pr.id";
-    private final String selectProjectName = "select project_name from gosqltask1.projects";
 
-    /*Эта функция - затычка, т.к. в таких запросах как sum,avg resultSet.next() и !resultSet.wasNull()
+    /*Эта функция - затычка, т.к. в таких запросах как sum,avg - resultSet.next() и !resultSet.wasNull()
      * всегда возвращают ТРУ, а valueOf(resultSet.getFloat) вообще тупо не парится и ставит число 0.0
      * хотя запрос в бд уверенно даёт null. Может косяк мускла, может такая особенность агрегирующих ф-ций */
     private boolean isPresentProjectWithName(String projectName) {
@@ -35,19 +33,12 @@ public class ProjectDAO {
             ResultSet resultSet = statement.executeQuery("select id from gosqltask1.projects where project_name='" + projectName + "'");
             return resultSet.next();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Ошибка в запросе "+e.getMessage());
         }
         return false;
     }
-    private void wrongQuery(){
-        log.error("Ошибка в запросе");
-    }
+
     //1
-    /* Пусть метод возвращает сразу сумму, число, не нужен целый проект, см. коммент в ProjectService
-     * Float - плохой выбор для работы с данными, которые требуют точности, например, деньги
-     * У нас же есть класс BigDecimal для этого
-     */
-    //пофиксил
     public BigDecimal getProjectSumSalary(String projectName) {
         BigDecimal sumSalary = null;
         if (isPresentProjectWithName(projectName)) {
@@ -59,7 +50,7 @@ public class ProjectDAO {
                     sumSalary = BigDecimal.valueOf(resultSet.getFloat("value"));
                 }
             } catch (SQLException e) {
-                System.out.println(e);
+                log.error("Ошибка в запросе " + e.getMessage());
             }
         }
         return sumSalary;
@@ -80,54 +71,36 @@ public class ProjectDAO {
                 list.add(project);
             }
         } catch (SQLException e) {
-            wrongQuery();
+            log.error("Ошибка в запросе " + e.getMessage());
         }
         return list;
     }
 
-    /*тебе опять не нужен целый объект, ты собираешься вывести только названия
-     */
-    //пофиксил
-    public List<String> getProjectsName() {
-        List<String> projectsName = new ArrayList<>();
+    //6.1.1
+    public boolean addProject(Project proj) {
         try {
             connectionBegin();
-            ResultSet resultSet = statement.executeQuery(selectProjectName);
-            while (resultSet.next()) {
-                projectsName.add(resultSet.getString("project_name"));
-            }
+            log.debug("Добавление в БД ",proj);
+            statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
+                    "('" + proj.getName() + "','" + proj.getVersion() + "'," + proj.getCost() + "," + proj.getStartDate() + ")");
+            return true;
         } catch (SQLException e) {
-            wrongQuery();
+            log.error("Ошибка в запросе " + e.getMessage());
+            return false;
         }
-        return projectsName;
     }
 
-    public boolean addProject(String name, String version, float cost, Date date) {
-        boolean isSuccess = false;
+    //6.1.2
+    public boolean addProject(Project proj, String sqlDateFunction) {
         try {
             connectionBegin();
+            log.debug("Добавление в БД ",proj);
             statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
-                    "('" + name + "','" + version + "'," + cost + "," + date + ")");
-            isSuccess = true;
+                    "('" + proj.getName() + "','" + proj.getVersion() + "'," + proj.getCost() + "," + sqlDateFunction + ")");
+            return true;
         } catch (SQLException e) {
-            wrongQuery();
+            log.error("Ошибка в запросе " + e.getMessage());
+            return false;
         }
-        return isSuccess;
-    }
-
-    /*не боишься что придет некорретный формат даты в строке?
-    *почитай про DateTimeFormatter, убедись, что передаешь в БД валидную дату*/
-    //была идея(мысль/замысел) что использование даты из import java.sql.Date; задаст валидность на вызове ф-ции.
-    public boolean addProject(String name, String version, float cost, String sqlDateFunction) {
-        boolean isSuccess = false;
-        try {
-            connectionBegin();
-            statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
-                    "('" + name + "','" + version + "'," + cost + "," + sqlDateFunction + ")");
-            isSuccess=true;
-        } catch (SQLException e) {
-            wrongQuery();
-        }
-        return isSuccess;
     }
 }

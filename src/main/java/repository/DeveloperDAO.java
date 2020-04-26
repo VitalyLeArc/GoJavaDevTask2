@@ -3,25 +3,15 @@ package repository;
 import domain.Developer;
 import lombok.extern.slf4j.Slf4j;
 
+import static repository.QueryToDB.*;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static repository.QueryToDB.*;
-
 @Slf4j
 public class DeveloperDAO {
-    private void wrongQuery() {
-        log.error("Ошибка в запросе");
-    }
-
-    /*что этот метод делает в DeveloperDAO?
-     *почему он возвращает boolean.
-     *Если ты просто проверяешь, существует такой проект или нет, то назови это checkProjectExistsWithName
-     *А вообще лучше сделать метод, который будет именно возвращать optional проект по имени и бросать исключение/выводить сообщение в консоль, если такого нет*/
-    //исправил
-
     //2
     public List<Developer> getDevelopersForProject(String projectName) {
         List<Developer> list = new ArrayList<>();
@@ -36,7 +26,7 @@ public class DeveloperDAO {
                 list.add(new Developer(resultSet.getString("name")));
             }
         } catch (SQLException e) {
-            wrongQuery();
+            log.error("Ошибка в запросе "+e.getMessage());
         }
         return list;
     }
@@ -55,7 +45,7 @@ public class DeveloperDAO {
                 list.add(new Developer(resultSet.getString("name")));
             }
         } catch (SQLException e) {
-            wrongQuery();
+            log.error("Ошибка в запросе "+e.getMessage());
         }
         return list;
     }
@@ -74,21 +64,22 @@ public class DeveloperDAO {
                 list.add(new Developer(resultset.getString("name")));
             }
         } catch (SQLException e) {
-            wrongQuery();
+            log.error("Ошибка в запросе "+e.getMessage());
         }
         return list;
     }
 
-    public boolean addDeveloper(String name, int age, String sex, int departmentId, float salary) {
-        boolean isSuccess = false;
+    //6.2
+    public boolean addDeveloper(Developer dev) {
         try {
             connectionBegin();
-            statement.execute("insert into gosqltask1.developers (name,age,sex,department_id,salary) values " +
-                    "('" + name + "'," + age + "," + "'" + sex + "'," + departmentId + "," + salary + ")");
-            isSuccess = true;
+            log.debug("Добавление в БД ",dev);
+            statement.execute("insert into gosqltask1.developers (name,age,sex,salary) values " +
+                    "('" + dev.getName() + "'," + dev.getAge() + ",'" + dev.getSex() + "'," + dev.getSalary() + ")");
+            return true;
         } catch (SQLException e) {
-            wrongQuery();
+            log.error("Ошибка в запросе "+e.getMessage());
+            return false;
         }
-        return isSuccess;
     }
 }

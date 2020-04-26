@@ -2,33 +2,23 @@ package domain;
 
 import java.util.Objects;
 
+import lombok.*;
+
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode (of = "id")
+@Getter
+@Setter
 public class Customer {
-    String name;
-    long id;
-    int minAge;
-    int maxAge;
+    private String name;
+    private long id;
+    private int minAge;
+    private int maxAge;
 
     public Customer(String name,  int minAge, int maxAge) {
         this.name = name;
         this.minAge = minAge;
         this.maxAge = maxAge;
-    }
-    public Customer(String name, long id, int minAge, int maxAge) {
-        this(name,minAge,maxAge);
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public long getId() {
-        return id;
-    }
-    public int getMinAge() {
-        return minAge;
-    }
-    public int getMaxAge() {
-        return maxAge;
     }
 
     public boolean equals(Object obj) {

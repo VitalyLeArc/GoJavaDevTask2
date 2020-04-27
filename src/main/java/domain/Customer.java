@@ -20,13 +20,5 @@ public class Customer {
         this.minAge = minAge;
         this.maxAge = maxAge;
     }
-
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Customer customer = (Customer)obj;
-        return id == customer.id && minAge == customer.minAge &&
-                maxAge == customer.maxAge && Objects.equals(name, customer.name);
-    }
-
+    
 }

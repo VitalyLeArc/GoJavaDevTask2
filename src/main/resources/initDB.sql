@@ -1,9 +1,9 @@
-create schema if not exists gosqltask1
+create schema if not exists godevtask2
 
 CHARACTER SET = utf8mb4
 COLLATE= utf8mb4_0900_ai_ci;
  
-use gosqltask1;
+use godevtask2;
 
 drop table if exists developers;
 create table developers(
@@ -26,6 +26,7 @@ create table projects(
 	id int auto_increment,
     	project_name varchar(45) not null,
     	version varchar(45) not null,
+    	cost float,
         datebegin date,
     	primary key(id));
         
@@ -272,10 +273,21 @@ join skills sk
 on sk.id=lds.skill_id) tmp
 set dev.salary=dev.salary+400 where tmp.skill_name='lua' and tmp.id=dev.id;
 
-update gosqltask1.projects pr set datebegin=adddate(now(),interval -5 day) where pr.id = 1;
-update gosqltask1.projects pr set datebegin=adddate(now(),interval -3 month) where pr.id = 2;
-update gosqltask1.projects pr set datebegin=adddate(now(),interval -2 month) where pr.id = 3;
-update gosqltask1.projects pr set datebegin=adddate(now(),interval -7 month) where pr.id = 4;
-update gosqltask1.projects pr set datebegin=adddate(now(),interval -4 month) where pr.id = 5;
-update gosqltask1.projects pr set datebegin=adddate(now(),interval -1 month) where pr.id = 6;
-update gosqltask1.projects pr set datebegin=adddate(now(),interval -11 month) where pr.id = 7;
+update projects pr
+    inner join (select pr.project_name, sum(dev.salary) as value
+                from projects pr
+                join link_developers_projects ldp
+                on ldp.project_id = pr.id
+                join developers dev
+                on dev.id=ldp.dev_id
+                group by pr.project_name) tmp
+set pr.cost=tmp.value
+where pr.project_name=tmp.project_name;
+
+update godevtask2.projects pr set datebegin=adddate(now(),interval -5 day) where pr.id = 1;
+update godevtask2.projects pr set datebegin=adddate(now(),interval -3 month) where pr.id = 2;
+update godevtask2.projects pr set datebegin=adddate(now(),interval -2 month) where pr.id = 3;
+update godevtask2.projects pr set datebegin=adddate(now(),interval -7 month) where pr.id = 4;
+update godevtask2.projects pr set datebegin=adddate(now(),interval -4 month) where pr.id = 5;
+update godevtask2.projects pr set datebegin=adddate(now(),interval -1 month) where pr.id = 6;
+update godevtask2.projects pr set datebegin=adddate(now(),interval -11 month) where pr.id = 7;

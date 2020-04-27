@@ -18,9 +18,9 @@ public class DeveloperDAO {
         try {
             connectionBegin();
             ResultSet resultSet = statement.executeQuery(
-                    "select dev.name from gosqltask1.developers dev " +
-                            "join gosqltask1.link_developers_projects ldp on dev.id=ldp.dev_id " +
-                            "join gosqltask1.projects pr on pr.id=ldp.project_id " +
+                    "select dev.name from godevtask2.developers dev " +
+                            "join godevtask2.link_developers_projects ldp on dev.id=ldp.dev_id " +
+                            "join godevtask2.projects pr on pr.id=ldp.project_id " +
                             "where pr.project_name='" + projectName + "'");
             while (resultSet.next()) {
                 list.add(new Developer(resultSet.getString("name")));
@@ -37,9 +37,9 @@ public class DeveloperDAO {
         try {
             connectionBegin();
             ResultSet resultSet = statement.executeQuery(
-                    "select name from gosqltask1.developers dev " +
-                            "join gosqltask1.link_developers_skills lds on dev.id=lds.dev_id " +
-                            "join gosqltask1.skills sk on sk.id=lds.skill_id " +
+                    "select name from godevtask2.developers dev " +
+                            "join godevtask2.link_developers_skills lds on dev.id=lds.dev_id " +
+                            "join godevtask2.skills sk on sk.id=lds.skill_id " +
                             "where sk.skill_name='" + skill + "'");
             while (resultSet.next()) {
                 list.add(new Developer(resultSet.getString("name")));
@@ -56,9 +56,9 @@ public class DeveloperDAO {
         try {
             connectionBegin();
             ResultSet resultset = statement.executeQuery(
-                    "select distinct name from gosqltask1.developers dev " +
-                            "join gosqltask1.link_developers_skills lds on dev.id=lds.dev_id " +
-                            "join gosqltask1.skills sk on sk.id=lds.skill_id " +
+                    "select distinct name from godevtask2.developers dev " +
+                            "join godevtask2.link_developers_skills lds on dev.id=lds.dev_id " +
+                            "join godevtask2.skills sk on sk.id=lds.skill_id " +
                             "where sk.grade ='" + grade + "'");
             while (resultset.next()) {
                 list.add(new Developer(resultset.getString("name")));
@@ -74,7 +74,7 @@ public class DeveloperDAO {
         try {
             connectionBegin();
             log.debug("Добавление в БД ",dev);
-            statement.execute("insert into gosqltask1.developers (name,age,sex,salary) values " +
+            statement.execute("insert into godevtask2.developers (name,age,sex,salary) values " +
                     "('" + dev.getName() + "'," + dev.getAge() + ",'" + dev.getSex() + "'," + dev.getSalary() + ")");
             return true;
         } catch (SQLException e) {

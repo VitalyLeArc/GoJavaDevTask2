@@ -13,14 +13,14 @@ import java.util.List;
 
 @Slf4j
 public class ProjectDAO {
-    private final String selectSumSalaryForProject = "select sum(salary) as value from gosqltask1.developers dev " +
-            "inner join gosqltask1.link_developers_projects ldp on ldp.dev_id=dev.id " +
-            "inner join gosqltask1.projects pr on pr.id=ldp.project_id " +
+    private final String selectSumSalaryForProject = "select sum(salary) as value from godevtask2.developers dev " +
+            "inner join godevtask2.link_developers_projects ldp on ldp.dev_id=dev.id " +
+            "inner join godevtask2.projects pr on pr.id=ldp.project_id " +
             "where pr.project_name = ";
     private final String selectAllProjectsInfo = "select pr.id,pr.project_name as name,pr.version,pr.datebegin,count(dev.id)as devcount " +
-            "from gosqltask1.projects pr " +
-            "join gosqltask1.link_developers_projects ldp on ldp.project_id=pr.id " +
-            "join gosqltask1.developers dev on ldp.dev_id=dev.id " +
+            "from godevtask2.projects pr " +
+            "join godevtask2.link_developers_projects ldp on ldp.project_id=pr.id " +
+            "join godevtask2.developers dev on ldp.dev_id=dev.id " +
             "group by pr.id " +
             "order by pr.id";
 
@@ -30,7 +30,7 @@ public class ProjectDAO {
     private boolean isPresentProjectWithName(String projectName) {
         try {
             connectionBegin();
-            ResultSet resultSet = statement.executeQuery("select id from gosqltask1.projects where project_name='" + projectName + "'");
+            ResultSet resultSet = statement.executeQuery("select id from godevtask2.projects where project_name='" + projectName + "'");
             return resultSet.next();
         } catch (SQLException e) {
             log.error("Ошибка в запросе "+e.getMessage());
@@ -81,7 +81,7 @@ public class ProjectDAO {
         try {
             connectionBegin();
             log.debug("Добавление в БД ",proj);
-            statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
+            statement.execute("insert into godevtask2.projects (project_name,version,cost,datebegin) values " +
                     "('" + proj.getName() + "','" + proj.getVersion() + "'," + proj.getCost() + "," + proj.getStartDate() + ")");
             return true;
         } catch (SQLException e) {
@@ -95,7 +95,7 @@ public class ProjectDAO {
         try {
             connectionBegin();
             log.debug("Добавление в БД ",proj);
-            statement.execute("insert into gosqltask1.projects (project_name,version,cost,datebegin) values " +
+            statement.execute("insert into godevtask2.projects (project_name,version,cost,datebegin) values " +
                     "('" + proj.getName() + "','" + proj.getVersion() + "'," + proj.getCost() + "," + sqlDateFunction + ")");
             return true;
         } catch (SQLException e) {

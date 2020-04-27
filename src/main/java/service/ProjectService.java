@@ -28,9 +28,13 @@ public class ProjectService {
     public void printAllProjectsInfo() {
         List<Project> projects = projectDAO.getAllProjectsInfo();
         if (!projects.isEmpty()) {
+            try{
             System.out.println("Информация о проектах имеющихся в БД: ");
             for (Project project : projects) {
                 System.out.println("\t\t" + project.toString());
+            }
+            }catch (NullPointerException e){
+                log.error("Null in some value"+e.getMessage());
             }
         } else {
             emptyQuery();

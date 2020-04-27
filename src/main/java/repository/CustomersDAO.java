@@ -14,7 +14,7 @@ public class CustomersDAO {
         try {
             connectionBegin();
             log.debug("Добавление в БД ",customer);
-            statement.execute("insert into gosqltask1.customers (customer_name,minage,maxage) values " +
+            statement.execute("insert into godevtask2.customers (customer_name,minage,maxage) values " +
                     "('" + customer.getName() + "'," + customer.getMinAge() + "," + customer.getMaxAge() + ")");
             return true;
         } catch (SQLException e) {
